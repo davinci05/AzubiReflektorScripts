@@ -1,0 +1,4 @@
+python-nmap
+python-dotenv
+requests
+influxdb_client
