@@ -30,10 +30,15 @@ def toggle_monitor(state):
     state_str = 'on' if state else 'off'
     print(f"Monitor turned {state_str}.")
 
-# Function to check if current time is in restricted range
-def is_in_time_range(start_time, end_time):
+# Function to check if current time is within the allowed range
+def is_within_allowed_time(start_time, end_time):
     current_time = datetime.now().time()
-    return start_time <= current_time <= end_time
+    # If the end time is on the same day
+    if start_time < end_time:
+        return start_time <= current_time < end_time
+    # If the end time is on the next day
+    else:
+        return start_time <= current_time or current_time < end_time
 
 # Main function
 def main():
@@ -56,15 +61,7 @@ def main():
 
     try:
         while True:
-            current_time = datetime.now().time()
-
-            # Turn off the monitor if within restricted time or past the restricted end time
-            if is_in_time_range(restricted_start_time, restricted_end_time) or current_time > restricted_end_time:
-                if monitor_on:
-                    print("Within restricted time or past end time. Turning monitor off.")
-                    toggle_monitor(False)
-                    monitor_on = False
-            else:
+            if is_within_allowed_time(restricted_start_time, restricted_end_time):
                 if GPIO.input(PIR_PIN):
                     last_motion_time = time.time()
                     if not monitor_on:
@@ -73,6 +70,11 @@ def main():
                         monitor_on = True
                 elif monitor_on and (time.time() - last_motion_time > DELAY_TIME):
                     print(f"No motion for {DELAY_TIME} seconds. Turning monitor off.")
+                    toggle_monitor(False)
+                    monitor_on = False
+            else:
+                if monitor_on:
+                    print("Outside of allowed time. Turning monitor off.")
                     toggle_monitor(False)
                     monitor_on = False
 
