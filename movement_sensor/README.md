@@ -25,10 +25,10 @@ This project uses a Raspberry Pi and a PIR sensor to automatically turn a monito
 
 1. **Clone the Repository**
 
-    ´´´bash
+    ```bash
     git clone https://github.com/davinci05/AzubiReflektorScripts.git
     cd AzubiReflektorScripts
-    ´´´
+    ```
 
 2. **Install Dependencies**
 
