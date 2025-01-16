@@ -37,7 +37,9 @@ def main():
     monitor_on = False
     last_motion_time = 0
 
-    print("Waiting for motion...")
+    # Ensure the monitor is off at the start
+    toggle_monitor(False)
+    print("Monitor is off by default. Waiting for motion...")
 
     try:
         while True:
