@@ -56,7 +56,15 @@ def main():
 
     try:
         while True:
-            if not is_in_time_range(restricted_start_time, restricted_end_time):
+            current_time = datetime.now().time()
+
+            # Turn off the monitor if within restricted time or past the restricted end time
+            if is_in_time_range(restricted_start_time, restricted_end_time) or current_time > restricted_end_time:
+                if monitor_on:
+                    print("Within restricted time or past end time. Turning monitor off.")
+                    toggle_monitor(False)
+                    monitor_on = False
+            else:
                 if GPIO.input(PIR_PIN):
                     last_motion_time = time.time()
                     if not monitor_on:
@@ -67,18 +75,12 @@ def main():
                     print(f"No motion for {DELAY_TIME} seconds. Turning monitor off.")
                     toggle_monitor(False)
                     monitor_on = False
-            else:
-                if monitor_on:
-                    print("Within restricted time. Turning monitor off.")
-                    toggle_monitor(False)
-                    monitor_on = False
 
             time.sleep(1)
     except KeyboardInterrupt:
         print("Program terminated.")
     finally:
         GPIO.cleanup()
-
 
 if __name__ == '__main__':
     main()
