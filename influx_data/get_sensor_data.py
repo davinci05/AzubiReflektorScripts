@@ -3,9 +3,14 @@ import influxdb_client
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import json
+import os
+
+# Get the directory of the current script
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Load configuration from config.json
-with open('config.json') as config_file:
+config_path = os.path.join(script_dir, 'config.json')
+with open(config_path) as config_file:
     config = json.load(config_file)
 
 temperature_ip_addresses = config["temperature_ip_addresses"]
@@ -20,7 +25,10 @@ write_client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 write_api = write_client.write_api(write_options=SYNCHRONOUS)
 
 def print_error(message):
-    print(f"\033[91m{message}\033[0m")
+    print(f"\033[91m[Error] {message}\033[0m")
+
+def print_info(message):
+    print(f"[Info] {message}")
 
 def get_temperature(ip):
     url = f"http://{ip}/status"
@@ -74,7 +82,7 @@ def store_temperature_data(ip, temperature):
             .field("value", temperature)
         )
         write_api.write(bucket=bucket, org=org, record=point)
-        print(f"Temperature data from {ip} written to InfluxDB.")
+        print_info(f"Temperature data from {ip} written to InfluxDB.")
     except Exception as e:
         print_error(f"Error writing temperature data to InfluxDB: {e}")
 
@@ -86,7 +94,7 @@ def store_power_data(ip, power):
             .field("value", power)
         )
         write_api.write(bucket=bucket, org=org, record=point)
-        print(f"Power data from {ip} written to InfluxDB.")
+        print_info(f"Power data from {ip} written to InfluxDB.")
     except Exception as e:
         print_error(f"Error writing power data to InfluxDB: {e}")
 
@@ -111,7 +119,7 @@ def store_air_data(ip, air_data):
             .field("pm10_est", air_data["pm10_est"])
         )
         write_api.write(bucket=bucket, org=org, record=point)
-        print(f"Air quality data from {ip} written to InfluxDB.")
+        print_info(f"Air quality data from {ip} written to InfluxDB.")
     except Exception as e:
         print_error(f"Error writing air quality data to InfluxDB: {e}")
 
@@ -119,7 +127,7 @@ def store_air_data(ip, air_data):
 for ip in temperature_ip_addresses:
     temp = get_temperature(ip)
     if temp is not None:
-        print(f"Current temperature at {ip}: {temp}°C")
+        print_info(f"Current temperature at {ip}: {temp}°C")
         store_temperature_data(ip, temp)
     else:
         print_error(f"Could not retrieve temperature data from {ip}")
@@ -128,7 +136,7 @@ for ip in temperature_ip_addresses:
 for ip in power_ip_addresses:
     power = get_power_data(ip)
     if power is not None:
-        print(f"Current power at {ip}: {power}W")
+        print_info(f"Current power at {ip}: {power}W")
         store_power_data(ip, power)
     else:
         print_error(f"Could not retrieve power data from {ip}")
@@ -137,7 +145,7 @@ for ip in power_ip_addresses:
 for ip in air_quality_ip_addresses:
     air_data = get_air_data(ip)
     if air_data is not None:
-        print(f"Current air data at {ip}: {air_data}")
+        print_info(f"Current air data at {ip}: {air_data}")
         store_air_data(ip, air_data)
     else:
         print_error(f"Could not retrieve air data from {ip}")
