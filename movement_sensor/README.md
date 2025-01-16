@@ -25,21 +25,20 @@ This project uses a Raspberry Pi and a PIR sensor to automatically turn a monito
 
 1. **Clone the Repository**
 
-   ```bash
-   git clone https://github.com/davinci05/AzubiReflektorScripts.git
-   cd AzubiReflektorScripts
-```
+    ´´´bash
+    git clone https://github.com/davinci05/AzubiReflektorScripts.git
+    cd AzubiReflektorScripts
+    ```
 
 2. **Install Dependencies**
 
 Make sure you have Python 3 and the required libraries installed:
 
-´´´bash
-
-sudo apt-get update
-sudo apt-get install python3-pip
-pip3 install RPi.GPIO
-```
+    ´´´bash
+    sudo apt-get update
+    sudo apt-get install python3-pip
+    pip3 install RPi.GPIO
+    ```
 
 3. **Install wlr-randr**
 
@@ -48,12 +47,12 @@ Follow the instructions here to install wlr-randr.
 Configuration
 Edit the config.json file to set your desired delay time and PIR sensor GPIO pin:
 
-´´´json
+    ´´´json
 
-{
-    "DELAY_TIME": 60,
-    "PIR_PIN": 17
-}´´´
+    {
+        "DELAY_TIME": 60,
+        "PIR_PIN": 17
+    }´´´
 
 DELAY_TIME: Time in seconds before the monitor turns off after no motion is detected.
 PIR_PIN: GPIO pin number where the PIR sensor is connected.
@@ -61,6 +60,6 @@ Usage
 Run the script using Python 3:
 
 
-´´´bash
-python3 main.py
-´´´
+    ´´´bash
+    python3 main.py
+    ´´´
