@@ -1,6 +1,6 @@
 # AzubiReflektorScripts
 
-This project contains scripts designed to work with the [MagicMirror2 Project](https://github.com/davinci05/AzubiReflektor), enhancing its functionality and providing additional features.
+This project contains scripts designed to work with the [AzubiReflektor](https://github.com/davinci05/AzubiReflektor), enhancing its functionality and providing additional features.
 
 ## Overview
 
