@@ -1,15 +1,1 @@
-# Ignore virutal environment variables
-humidity_sensor/.env
-movement_sensor/.env
-
-# Ignore pipe
-pipe/
-
-# Ignore virtual environment directories
-Include/
-Lib/
-Scripts/
-
-# Ignore compiled Python files
-__pycache__/
-*.py[cod]
+influx_data/config.json
