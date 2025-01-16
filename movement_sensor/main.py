@@ -10,8 +10,8 @@ def load_config(config_path='config.json', default_config=None):
         default_config = {
             'DELAY_TIME': 60,
             'PIR_PIN': 17,
-            'RESTRICTED_START_TIME': "07:15",
-            'RESTRICTED_END_TIME': "15:15"
+            'START_TIME': "07:15",
+            'END_TIME': "15:15"
         }
     
     try:
@@ -46,8 +46,8 @@ def main():
     
     PIR_PIN = config.get('PIR_PIN', 17)
     DELAY_TIME = config.get('DELAY_TIME', 60)
-    restricted_start_time = datetime.strptime(config.get('RESTRICTED_START_TIME', "07:15"), "%H:%M").time()
-    restricted_end_time = datetime.strptime(config.get('RESTRICTED_END_TIME', "15:15"), "%H:%M").time()
+    start_time = datetime.strptime(config.get('START_TIME', "07:15"), "%H:%M").time()
+    end_time = datetime.strptime(config.get('END_TIME', "15:15"), "%H:%M").time()
     
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(PIR_PIN, GPIO.IN)
@@ -61,7 +61,7 @@ def main():
 
     try:
         while True:
-            if is_within_allowed_time(restricted_start_time, restricted_end_time):
+            if is_within_allowed_time(start_time, end_time):
                 if GPIO.input(PIR_PIN):
                     last_motion_time = time.time()
                     if not monitor_on:
