@@ -33,12 +33,7 @@ def toggle_monitor(state):
 # Function to check if current time is within the allowed range
 def is_within_allowed_time(start_time, end_time):
     current_time = datetime.now().time()
-    # If the end time is on the same day
-    if start_time < end_time:
-        return start_time <= current_time < end_time
-    # If the end time is on the next day
-    else:
-        return start_time <= current_time or current_time < end_time
+    return start_time <= current_time < end_time
 
 # Main function
 def main():
