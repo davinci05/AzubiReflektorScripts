@@ -21,6 +21,7 @@ def load_config(config_path='config.json', default_config=None):
         print("Configuration file not found. Using default values.")
         config = default_config
 
+    print(f"Configuration loaded: {config}")
     return config
 
 # Function to toggle monitor
