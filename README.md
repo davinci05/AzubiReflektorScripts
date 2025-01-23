@@ -11,6 +11,7 @@ AzubiReflektorScripts aims to complement the AzubifRelektor project by offering 
 - **Motion-Activated Monitor Control**: Automatically turns the monitor on or off based on detected motion.
 - **Influx Data Scripts**: Loading Data From IOT Devices in the network and loading them into an influxdb 
 - **Customizable Settings**: Easily configure settings via JSON files.
+- **Pipeline**: Automaticly pull scripts from repo, update packages and restart the project
 
 ## Installation
 
@@ -19,4 +20,5 @@ AzubiReflektorScripts aims to complement the AzubifRelektor project by offering 
    ```bash
    git clone https://github.com/davinci05/AzubiReflektorScripts.git
    cd AzubiReflektorScripts
+   chmod +x pipe/update.sh
 ```
