@@ -1,4 +1,6 @@
 {
     "DELAY_TIME": 30,
-    "PIR_PIN": 17
+    "PIR_PIN": 17,
+    "START_TIME": "07:15",
+    "END_TIME": "15:15"
 }
