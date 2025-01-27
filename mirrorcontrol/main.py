@@ -9,14 +9,22 @@ app = Flask(__name__)
 timeline = []
 
 def get_service_status():
-    """Check the service status using pm2."""
+    """Check the service status of MagicMirror using pm2."""
     if platform.system() == "Linux":
         try:
-            result = subprocess.run(['pm2', 'status', 'magicmirror'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            # Abrufen der pm2-Status-Tabelle
+            result = subprocess.run(['pm2', 'list'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output = result.stdout.decode('utf-8')
+
+            # Initialstatus als inaktiv setzen
             status = "inactive"
-            if "online" in output.lower():
-                status = "active"
+
+            # Jede Zeile nach dem MagicMirror-Prozess durchsuchen
+            for line in output.splitlines():
+                if "magicmirror" in line.lower() and "online" in line.lower():
+                    status = "active"
+                    break
+
             update_timeline(status)
             return status
         except FileNotFoundError:
