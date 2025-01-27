@@ -9,19 +9,34 @@ app = Flask(__name__)
 timeline = []
 
 def get_service_status():
+    """Check the service status using pm2."""
     if platform.system() == "Linux":
-        result = subprocess.run(['pm2', 'status', 'magicmirror'], stdout=subprocess.PIPE)
-        output = result.stdout.decode('utf-8')
-        status = "inactive"
-        if "online" in output:
-            status = "active"
-        update_timeline(status)
-        return status
+        try:
+            result = subprocess.run(['pm2', 'status', 'magicmirror'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = result.stdout.decode('utf-8')
+            status = "inactive"
+            if "online" in output.lower():
+                status = "active"
+            update_timeline(status)
+            return status
+        except FileNotFoundError:
+            return "pm2 not installed"
+        except Exception as e:
+            return f"Error: {e}"
     else:
         # Simulate the service status on non-Linux systems
         status = "active"
         update_timeline(status)
         return status
+
+def update_timeline(status):
+    """Update the timeline with the current status."""
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    event = {"time": now, "status": status}
+    timeline.append(event)
+    # Keep only the last 10 events for simplicity
+    if len(timeline) > 10:
+        timeline.pop(0)
 
 def update_timeline(status):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
