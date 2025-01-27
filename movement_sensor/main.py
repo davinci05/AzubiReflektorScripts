@@ -34,7 +34,10 @@ def toggle_monitor(state):
 # Function to check if current time is within the allowed range
 def is_within_allowed_time(start_time, end_time):
     current_time = datetime.now().time()
-    return start_time <= current_time < end_time
+    if start_time <= end_time:
+        return start_time <= current_time < end_time
+    else:  # Over midnight
+        return current_time >= start_time or current_time < end_time
 
 # Main function
 def main():
@@ -48,12 +51,18 @@ def main():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(PIR_PIN, GPIO.IN)
     
-    monitor_on = False
+    monitor_on = True  # Assume the monitor is on initially
     last_motion_time = 0
 
-    # Ensure the monitor is off at the start
-    toggle_monitor(False)
-    print("Monitor is off by default. Waiting for motion...")
+    # Check initial time and set monitor state accordingly
+    if is_within_allowed_time(start_time, end_time):
+        toggle_monitor(False)
+        monitor_on = False
+        print("Monitor is off by default during allowed time. Waiting for motion...")
+    else:
+        toggle_monitor(True)
+        monitor_on = True
+        print("Monitor remains on outside of allowed time.")
 
     try:
         while True:
@@ -69,11 +78,13 @@ def main():
                     toggle_monitor(False)
                     monitor_on = False
             else:
-                if monitor_on:
-                    print("Outside of allowed time. Turning monitor off.")
-                    toggle_monitor(False)
-                    monitor_on = False
-
+                if not monitor_on:
+                    print("Outside of allowed time. Turning monitor on.")
+                    toggle_monitor(True)
+                    monitor_on = True
+                # Do not control the monitor outside of allowed time
+                # Monitor remains on
+                
             time.sleep(1)
     except KeyboardInterrupt:
         print("Program terminated.")
