@@ -9,13 +9,13 @@ INITIAL_DELAY = 30    # Initial delay for PIR sensor stabilization
 
 def turn_monitor_on():
     print("Turning monitor on.")
-    # Use xset to turn on the monitor
-    os.system("xset dpms force on")
+    # Use vcgencmd to turn the display on
+    os.system('/opt/vc/bin/vcgencmd display_power 1')
 
 def turn_monitor_off():
     print("Turning monitor off.")
-    # Use xset to turn off the monitor
-    os.system("xset dpms force off")
+    # Use vcgencmd to turn the display off
+    os.system('/opt/vc/bin/vcgencmd display_power 0')
 
 def main():
     GPIO.setmode(GPIO.BCM)
